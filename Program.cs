@@ -1,7 +1,9 @@
+using FluentValidation;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
+builder.Services.AddValidatorsFromAssemblyContaining<ProductDTOValidator>();
 
 builder.Services.AddCors(options =>
 {
