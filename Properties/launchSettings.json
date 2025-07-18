@@ -3,7 +3,10 @@
     "http": {
       "commandName": "Project",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "EPLACES_API_URL": "https://dev.tecnomcrm.com/api/v1/places/workshops",
+        "EPLACES_API_USER": "max@tecnom.com.ar",
+        "EPLACES_API_PASSWORD": "b0x3sApp"
       },
       "dotnetRunMessages": true,
       "applicationUrl": "http://localhost:5156"
@@ -11,7 +14,10 @@
     "https": {
       "commandName": "Project",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "EPLACES_API_URL": "https://dev.tecnomcrm.com/api/v1/places/workshops",
+        "EPLACES_API_USER": "max@tecnom.com.ar",
+        "EPLACES_API_PASSWORD": "b0x3sApp"
       },
       "dotnetRunMessages": true,
       "applicationUrl": "https://localhost:7213;http://localhost:5156"
@@ -20,7 +26,10 @@
       "commandName": "IISExpress",
       "launchBrowser": true,
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "EPLACES_API_URL": "https://dev.tecnomcrm.com/api/v1/places/workshops",
+        "EPLACES_API_USER": "max@tecnom.com.ar",
+        "EPLACES_API_PASSWORD": "b0x3sApp"
       }
     }
   },

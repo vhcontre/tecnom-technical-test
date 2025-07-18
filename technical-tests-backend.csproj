@@ -1,7 +1,7 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>technical_tests_backend_ssr</RootNamespace>
@@ -9,19 +9,25 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include=".github\workflows\ci.yml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Asp.Versioning.Mvc" Version="8.1.0" />
     <PackageReference Include="AutoMapper" Version="13.0.1" />
     <PackageReference Include="FluentValidation" Version="12.0.0" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.7" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.7" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.7">
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.7">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.7" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.7" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.7" />
+    <PackageReference Include="Polly" Version="7.2.3" />
+    <PackageReference Include="Polly.Extensions.Http" Version="3.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="8.0.7" />
   </ItemGroup>
 
 </Project>
