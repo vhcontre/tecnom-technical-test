@@ -14,10 +14,14 @@ public class PlacesService : IPlacesService
 
     public async Task<bool> IsPlaceActiveAsync(int placeId)
     {
-        //var activePlaces = await _ePlacesService.GetActivePlacesAsync();
-        //bool exists = activePlaces.Any(p => p.Id == placeId);
-        //_logger.LogInformation("Validación de lugar {PlaceId}: {Exists}", placeId, exists);
-        //return exists;
-        return true;
+        var activePlaces = await _ePlacesService.GetActivePlacesAsync();
+        _logger.LogInformation("Cantidad de talleres activos recibidos: {Count}", activePlaces.Count);
+        foreach (var p in activePlaces)
+        {
+            _logger.LogInformation("Taller activo: Id={Id}, Name={Name}, IsActive={IsActive}", p.Id, p.Name, p.IsActive);
+        }
+        bool exists = activePlaces.Any(p => p.Id == placeId && p.IsActive);
+        _logger.LogInformation("Validación de lugar {PlaceId}: {Exists}", placeId, exists);
+        return exists;
     }
 }

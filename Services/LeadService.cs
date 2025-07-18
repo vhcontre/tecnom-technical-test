@@ -8,24 +8,30 @@ using Microsoft.EntityFrameworkCore;
 public class LeadService : ILeadService
 {
     private readonly AppDbContext _dbContext;
-    private readonly IPlacesService _placesService;
+    private readonly IEPlacesService _ePlacesService;
     private readonly ILogger<LeadService> _logger;
 
-    public LeadService(AppDbContext dbContext, IPlacesService placesService, ILogger<LeadService> logger)
+    public LeadService(AppDbContext dbContext, IEPlacesService ePlacesService, ILogger<LeadService> logger)
     {
         _dbContext = dbContext;
-        _placesService = placesService;
+        _ePlacesService = ePlacesService;
         _logger = logger;
     }
 
     public async Task<Lead> CreateLeadAsync(Lead lead)
     {
         _logger.LogInformation("Validando Lead para el lugar {PlaceId}", lead.PlaceId);
-        if (!await _placesService.IsPlaceActiveAsync(lead.PlaceId))
+
+        // Validar que el place_id esté en los talleres activos
+        var activePlaces = await _ePlacesService.GetActivePlacesAsync();
+        bool isActive = activePlaces.Any(p => p.Id == lead.PlaceId && p.IsActive);
+
+        if (!isActive)
         {
             _logger.LogWarning("El lugar {PlaceId} no está activo o no existe", lead.PlaceId);
             throw new InvalidOperationException("El lugar especificado no está activo o no existe.");
         }
+
         _dbContext.Leads.Add(lead);
         await _dbContext.SaveChangesAsync();
         _logger.LogInformation("Lead creado exitosamente con ID {Id}", lead.Id);
