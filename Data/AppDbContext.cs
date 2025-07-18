@@ -24,6 +24,11 @@ public class AppDbContext : DbContext
     /// <summary>
     /// 
     /// </summary>
+    public DbSet<Lead> Leads { get; set; }
+
+    /// <summary>
+    /// 
+    /// </summary>
     /// <param name="modelBuilder"></param>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
