@@ -7,9 +7,9 @@ using technical_tests_backend_ssr.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
 builder.Services.AddControllers();
 builder.Services.AddValidatorsFromAssemblyContaining<ProductDTOValidator>();
-builder.Services.AddValidatorsFromAssemblyContaining<LeadDtoValidator>();
 
 builder.Services.AddCors(options =>
 {
@@ -41,27 +41,18 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseInMemoryDatabase("LeadsDb"));
+    options.UseSqlServer(connectionString));
 
 builder.Services.AddOpenApi();
 
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<ProductService>();
 
-var mapperConfig = new MapperConfiguration(cfg => {
-    cfg.AddProfile(new AutoMapperProfile());
-    cfg.AddProfile(new LeadProfile());
-});
+var mapperConfig = new MapperConfiguration(cfg => { cfg.AddProfile(new AutoMapperProfile()); });
 IMapper mapper = mapperConfig.CreateMapper();
 builder.Services.AddSingleton(mapper);
-
-// Registro de servicios para Leads y Places
-builder.Services.AddScoped<ILeadService, LeadService>();
-builder.Services.AddScoped<IPlacesService, PlacesService>();
-builder.Services.AddScoped<IEPlacesService, EPlacesService>();
-builder.Services.AddMemoryCache();
-builder.Services.AddHttpClient();
 
 var app = builder.Build();
 
