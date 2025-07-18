@@ -28,13 +28,16 @@ public class LeadService : ILeadService
         }
         _dbContext.Leads.Add(lead);
         await _dbContext.SaveChangesAsync();
-        _logger.LogInformation("Lead creado exitosamente con ID {Id}", lead.PlaceId);
+        _logger.LogInformation("Lead creado exitosamente con ID {Id}", lead.Id);
         return lead;
     }
 
     public async Task<Lead?> GetLeadByIdAsync(int id)
     {
         _logger.LogInformation("Buscando Lead con ID {Id}", id);
-        return await _dbContext.Leads.FindAsync(id);
+        return await _dbContext.Leads
+            .Include(l => l.Contact)
+            .Include(l => l.Vehicle)
+            .FirstOrDefaultAsync(l => l.Id == id);
     }
 }

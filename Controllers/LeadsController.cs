@@ -42,7 +42,8 @@ public class LeadsController : ControllerBase
         try
         {
             var createdLead = await _leadService.CreateLeadAsync(lead);
-            return CreatedAtAction(nameof(GetLeadById), new { id = createdLead.PlaceId }, createdLead);
+            var createdLeadDto = _mapper.Map<LeadDto>(createdLead);
+            return CreatedAtAction(nameof(GetLeadById), new { id = createdLead.Id }, createdLeadDto);
         }
         catch (InvalidOperationException ex)
         {
@@ -66,6 +67,7 @@ public class LeadsController : ControllerBase
             _logger.LogWarning("Lead no encontrado con ID {Id}", id);
             return NotFound(new { message = "Lead no encontrado." });
         }
-        return Ok(lead);
+        var leadDto = _mapper.Map<LeadDto>(lead);
+        return Ok(leadDto);
     }
 }

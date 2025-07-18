@@ -5,19 +5,25 @@ public class LeadProfile : Profile
 {
     public LeadProfile()
     {
-        // Mapeo bidireccional entre Lead y LeadDto
+        // Mapeo bidireccional entre Lead y LeadDto, incluyendo Id
         CreateMap<Lead, LeadDto>()
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
             .ForMember(dest => dest.ServiceType, opt => opt.MapFrom(src => MapServiceType(src.ServiceType)))
             .ForMember(dest => dest.Contact, opt => opt.MapFrom(src => src.Contact))
             .ForMember(dest => dest.Vehicle, opt => opt.MapFrom(src => src.Vehicle));
 
         CreateMap<LeadDto, Lead>()
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
             .ForMember(dest => dest.ServiceType, opt => opt.MapFrom(src => MapServiceTypeReverse(src.ServiceType)))
             .ForMember(dest => dest.Contact, opt => opt.MapFrom(src => src.Contact))
             .ForMember(dest => dest.Vehicle, opt => opt.MapFrom(src => src.Vehicle));
 
-        CreateMap<Contact, ContactDto>().ReverseMap();
-        CreateMap<Vehicle, VehicleDto>().ReverseMap();
+        CreateMap<Contact, ContactDto>()
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+            .ReverseMap();
+        CreateMap<Vehicle, VehicleDto>()
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+            .ReverseMap();
     }
 
     private static string MapServiceType(ServiceType serviceType)

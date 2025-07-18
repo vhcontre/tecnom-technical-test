@@ -2,6 +2,9 @@ using System.Text.Json.Serialization;
 
 public class ContactDto
 {
+    [JsonPropertyName("id")]
+    public int Id { get; set; }
+
     [JsonPropertyName("name")]
     public string Name { get; set; } = string.Empty;
 
@@ -14,6 +17,9 @@ public class ContactDto
 
 public class VehicleDto
 {
+    [JsonPropertyName("id")]
+    public int Id { get; set; }
+
     [JsonPropertyName("make")]
     public string Make { get; set; } = string.Empty;
 
@@ -29,6 +35,9 @@ public class VehicleDto
 
 public class LeadDto
 {
+    [JsonPropertyName("id")]
+    public int Id { get; set; }
+
     [JsonPropertyName("place_id")]
     public int PlaceId { get; set; }
 
