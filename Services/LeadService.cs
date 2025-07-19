@@ -8,13 +8,13 @@ using Microsoft.EntityFrameworkCore;
 public class LeadService : ILeadService
 {
     private readonly AppDbContext _dbContext;
-    private readonly IEPlacesService _ePlacesService;
+    private readonly IPlacesService _placesService;
     private readonly ILogger<LeadService> _logger;
 
-    public LeadService(AppDbContext dbContext, IEPlacesService ePlacesService, ILogger<LeadService> logger)
+    public LeadService(AppDbContext dbContext, IPlacesService placesService, ILogger<LeadService> logger)
     {
         _dbContext = dbContext;
-        _ePlacesService = ePlacesService;
+        _placesService = placesService;
         _logger = logger;
     }
 
@@ -22,9 +22,8 @@ public class LeadService : ILeadService
     {
         _logger.LogInformation("Validando Lead para el lugar {PlaceId}", lead.PlaceId);
 
-        // Validar que el place_id esté en los talleres activos
-        var activePlaces = await _ePlacesService.GetActivePlacesAsync();
-        bool isActive = activePlaces.Any(p => p.Id == lead.PlaceId && p.IsActive);
+        // Validar que el place_id esté en los talleres activos usando PlacesService
+        bool isActive = await _placesService.IsPlaceActiveAsync(lead.PlaceId);
 
         if (!isActive)
         {

@@ -1,43 +1,90 @@
-### Tecnologías aplicadas al Proyecto
+# Challenge Técnico: Back-End Dev (NET)
+
+### DeepWiki
+
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/vhcontre/tecnom-technical-test)
 
 ## NET 8 - WebApi
+
 El proyecto se desarrolló utilizando **NET 8**, una versión LTS (Long-Term Support) ampliamente soportada por el ecosistema .NET.
-- **http://localhost:7213/swagger/index.html**
 
-### Descripción del Proyecto
-- Expone un endpoint POST /api/leads que permite crear turnos a talleres
-  - Valida cuestiones básicas (campos requeridos por ejemplo)
-- Previo a la creación, valida que el place_id (id del taller al cual se va a crear el turno) esté dentro de los talleres activos. Para conocer esos talleres se consume una API externa.
-- Implementa cache para evitar ir a buscar los talleres ante cada nuevo post de leads.
+* URL Swagger: **[http://localhost:7213/swagger/index.html](http://localhost:7213/swagger/index.html)**
 
-### Manejo de variables sensibles
+## Descripción del Proyecto
 
-Las credenciales y la URL de la API externa se movieron al archivo de configuración (`appsettings.json` y/o `appsettings.Development.json`). Esto permite mantener los datos sensibles fuera del código fuente y facilita su gestión en diferentes entornos. Para producción, se recomienda utilizar variables de entorno.
+* Expone un endpoint **POST /api/leads** que permite crear turnos a talleres.
 
-### Resiliencia con Polly
+  * Valida cuestiones básicas (campos requeridos, formatos, etc.)
+* Antes de crear el turno, valida que el **place\_id** (id del taller) esté dentro de los talleres activos, consultando una **API externa**.
+* Implementa **cache** para evitar consultar la API externa en cada POST de leads.
 
-El proyecto incluye un ejemplo de cómo se puede utilizar Polly para agregar una política de reintentos automáticos en el HttpClient. En este entorno, la extensión no está disponible por cuestiones de compatibilidad, pero si se prueba en otro proyecto .NET 8 compatible, solo es necesario descomentar la línea en `Program.cs`:
+## Manejo de variables sensibles
+
+Las credenciales y la URL de la API externa están en el archivo de configuración (`appsettings.json` y/o `appsettings.Development.json`). Esto evita exponer datos sensibles en el código y facilita su configuración por entorno. Para producción, se recomienda configurar estos valores con **variables de entorno**.
+
+## Mapeos con AutoMapper
+
+Se utilizan perfiles de **AutoMapper** para mapear entre entidades de dominio y DTOs, incluyendo propiedades simples y objetos anidados.
+
+## Errores detallados en la API externa
+
+El servicio que consume la API externa gestiona errores proporcionando información detallada:
+
+* Código de estado HTTP
+* Motivo
+* Contenido de la respuesta
+* Excepción capturada
+
+Esto facilita el diagnóstico en desarrollo.
+
+## Uso correcto de async/await
+
+Todos los métodos asíncronos usan adecuadamente `async` y `await`. Esto asegura un comportamiento no bloqueante y eficiente en la ejecución de la API.
+
+
+## Resiliencia con Polly
+
+El proyecto incluye una integración opcional con **Polly** para reintentos automáticos en llamadas HTTP. En entornos compatibles con .NET 8, se puede activar descomentando en `Program.cs`:
 
 ```csharp
-// Si el entorno lo soporta, así se agrega una política de reintentos con Polly:
 builder.Services.AddHttpClient("EPlacesApiClient")
     .AddPolicyHandler(HttpPolicyExtensions
         .HandleTransientHttpError()
         .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(retryAttempt))
     );
 ```
+---
 
-De esta forma, el HttpClient utilizado por `EPlacesService` realizará reintentos automáticos ante fallos transitorios de la API externa. En este repositorio la línea permanece comentada para asegurar la compilación.
+## Tecnologías, Patrones y Librerías Utilizadas
 
-### Mapeos con AutoMapper
+| Categoría              | Elementos Implementados                                                                                |
+| ---------------------- | ------------------------------------------------------------------------------------------------------ |
+| **Framework**          | ASP.NET Core (.NET 8), WebAPI                                                                          |
+| **Persistencia**       | Entity Framework Core (InMemory)                                                                       |
+| **Mapeo de Objetos**   | AutoMapper                                                                                             |
+| **Validaciones**       | FluentValidation                                                                                       |
+| **Resiliencia**        | Polly (manejo de reintentos en servicios externos)                                                     |
+| **Documentación API**  | Swashbuckle (Swagger)                                                                                  |
+| **Patrones de Diseño** | Inyección de Dependencias, DTOs, Repository Pattern, Service Layer, Configuración Segura (appsettings) |
 
-El proyecto utiliza perfiles de AutoMapper para mapear todos los campos importantes entre entidades y DTOs en ambos sentidos. Los mapeos cubren propiedades simples y objetos anidados, asegurando que la conversión de datos sea completa y precisa en las operaciones de la API.
+---
 
-### Errores detallados en la API externa
+## Arquitectura y Componentes Principales
 
-El servicio queconsume la API externa registra y lanza errores con información detallada (código de estado, motivo, contenido de respuesta y excepción) cuando ocurre una falla. Esto facilita el debugging y la identificación rápida de problemas en la integración.
+* **Controladores:** Manejan los endpoints REST.
+* **Servicios:** Contienen la lógica de negocio y reglas de validación.
+* **Repositorios:** Manejo del acceso a datos (en memoria).
+* **Modelos y DTOs:** Estructuran los datos de dominio y transporte.
+* **AutoMapper:** Define mapeos entre entidades y DTOs.
+* **Validadores:** FluentValidation asegura la calidad y consistencia de los datos entrantes.
+* **API externa:** Validación de talleres activos con cache para mejorar la eficiencia.
 
-### Uso correcto de async/await
+## Funcionalidad principal
 
-Todos los métodos asíncronos del proyecto utilizan correctamente `async` y `await`, evitando llamadas bloqueantes como `.Result` o `.Wait()`. Esto garantiza un manejo eficiente de las operaciones asíncronas y previene bloqueos innecesarios en la ejecución de la API.
+Permite la **gestión de turnos para talleres**, validando datos ingresados y asegurando que el taller esté activo mediante:
 
+* Validaciones de entrada con FluentValidation
+* Mapeo y conversión entre modelos con AutoMapper
+* Validación contra API externa de talleres
+* Cache para reducir consumo de recursos
+* Opcionalmente, resiliencia con Polly
