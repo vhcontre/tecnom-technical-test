@@ -17,10 +17,10 @@ jobs:
           dotnet-version: '8.0.x'
 
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore technical-tests-backend.csproj
 
       - name: Build (Release)
-        run: dotnet build --no-restore --configuration Release
+        run: dotnet build technical-tests-backend.csproj --no-restore --configuration Release
 
       - name: Check code formatting
-        run: dotnet format --verify-no-changes
+        run: dotnet format technical-tests-backend.csproj --verify-no-changes

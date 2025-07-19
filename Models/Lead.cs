@@ -18,7 +18,7 @@ public class Lead
     public ServiceType ServiceType { get; set; }
 
     [Required]
-    public Contact Contact { get; set; }
+    public Contact Contact { get; set; } = new Contact();
 
     public Vehicle? Vehicle { get; set; }
 }

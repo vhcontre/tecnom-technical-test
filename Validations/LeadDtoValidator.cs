@@ -20,7 +20,7 @@ public class LeadDtoValidator : AbstractValidator<LeadDto>
 
         When(x => x.Vehicle != null, () =>
         {
-            RuleFor(x => x.Vehicle).SetValidator(new VehicleDtoValidator());
+            RuleFor(x => x.Vehicle!).SetValidator(new VehicleDtoValidator());
         });
     }
 }
