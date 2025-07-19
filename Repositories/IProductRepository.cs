@@ -21,5 +21,5 @@ public interface IProductRepository
     /// <param name="id">The unique identifier of the product to retrieve. Must be a positive integer.</param>
     /// <returns>A task representing the asynchronous operation. The task result contains the product with the specified
     /// identifier, or <see langword="null"/> if no product is found.</returns>
-    Task<Product?> GetByIdAsync(int id);    
+    Task<Product?> GetByIdAsync(int id);
 }

@@ -39,5 +39,5 @@ public class ProductService
     public Task<Product?> GetProductByIdAsync(int id)
     {
         return _productoRepository.GetByIdAsync(id);
-    }    
+    }
 }
